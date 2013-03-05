@@ -1,0 +1,1 @@
+MyApp.templates['some-thing']=Handlebars.compile("<div class=\"some-thing\">\n  <h3>{{title}}</h3>\n  <p><strong>{{description}}</strong></p>\n  <p>{{detail}}</p>\n  <a href=\"{{findoutmore-url}}\" class=\"findoutmore\">{{findoutmore-title}}</a>\n</div>");

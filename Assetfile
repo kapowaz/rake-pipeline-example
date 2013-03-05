@@ -1,0 +1,63 @@
+require 'rake-pipeline-web-filters'
+require 'sass'
+
+output "public/javascripts"
+input "assets/javascripts/vendor" do
+  match '**/*.js' do
+    concat [
+      "jquery-1.8.3.js",
+      "handlebars.js"
+    ], "vendor.js"
+    if ENV['RAKEP_ENV'] == "production"
+      uglify
+    end
+  end
+end
+
+input "assets/templates" do
+  match '**/*.handlebars' do
+    # handlebars
+    
+    filter(Rake::Pipeline::Web::Filters::HandlebarsFilter, {
+      # This determines the namespace for the generated Handlebars template methods.
+      :target => 'MyApp.templates',
+      :wrapper_proc => proc { |source| "Handlebars.compile(#{source});" }
+    })
+    
+    concat "templates.js"
+    if ENV['RAKEP_ENV'] == "production"
+      uglify
+    end
+  end
+end
+
+input "assets/javascripts/lib" do
+  match '**/*.js' do
+    concat [
+      "application.js",
+      "MyApp.js"
+    ], "application.js"
+    if ENV['RAKEP_ENV'] == "production"
+      uglify
+    end
+  end
+end
+
+output "public/stylesheets"
+input "assets/stylesheets" do
+  match "application.scss" do
+    # if you're committing the output, you'll end up with full paths to the individual sources 
+    # within the non-production version, which will mean conflict fun. You can disable these
+    # comments with the below option.
+    
+    scss # :line_comments => false
+    concat "application.css"
+
+    if ENV['RAKEP_ENV'] == "production"
+      yui_css
+    end
+  end
+end
+
+# To build production assets:
+# $ RAKEP_ENV=production bundle exec rakep build

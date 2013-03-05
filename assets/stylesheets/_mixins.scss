@@ -1,0 +1,45 @@
+@mixin vendor-prefixed-properties($property, $value...) {
+  -webkit-#{$property}: $value;
+  -moz-#{$property}: $value;
+  -ms-#{$property}: $value;
+  -o-#{$property}: $value;
+  $property: $value;
+}
+
+@mixin vendor-prefixed-values($property, $value) {
+  $property: '-webkit-#{$value}';
+  $property: '-moz-#{$value}';
+  $property: '-ms-#{$value}';
+  $property: '-o-#{$value}';
+  $property: $value;
+}
+
+@mixin image-replacement($width: 100%, $height: 100%) {
+  display: block;
+  text-indent: -999px;
+  background-repeat: no-repeat;
+  background-size: $width $height;
+  width: $width;
+  height: $height;
+}
+
+@mixin appearance($appearance: none) {
+  @include vendor-prefixed-properties('appearance', $appearance);
+}
+
+@mixin transition($properties, $duration: null, $timing_function: ease, $delay: 0s) {
+  @include vendor-prefixed-properties('transition-property', $properties);
+  @if $duration != null {
+    @include vendor-prefixed-properties('transition-duration', $duration);
+    @include vendor-prefixed-properties('transition-timing-function', $timing_function);
+    @include vendor-prefixed-properties('transition-delay', $delay);
+  }
+}
+
+@mixin linear-gradient($origin, $from_colour, $to_colour) {
+  background-image: -webkit-linear-gradient($origin, $from_colour, $to_colour);
+  background-image: -moz-linear-gradient($origin, $from_colour, $to_colour);
+  background-image: -ms-linear-gradient($origin, $from_colour, $to_colour);
+  background-image: -o-linear-gradient($origin, $from_colour, $to_colour);
+  background-image: linear-gradient($origin, $from_colour, $to_colour);
+}
